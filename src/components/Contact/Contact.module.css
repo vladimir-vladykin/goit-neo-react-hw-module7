@@ -1,0 +1,14 @@
+.contact {
+  padding: 8px;
+  border: 1px solid white;
+  border-radius: 8px;
+
+  display: flex;
+  gap: 24px;
+}
+
+.contact li {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
