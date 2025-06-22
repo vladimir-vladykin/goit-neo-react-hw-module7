@@ -1,17 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
+import { fetchContacts } from "./contactsOps";
 
 const contactsSlice = createSlice({
   name: "contacts",
   initialState: {
-    items: [
-      // initial list to simplify testing
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ],
+    items: [],
+    loading: false,
+    error: null,
   },
+  // fixme remove old reducers
   reducers: {
     addContact(state, action) {
       const newContact = {
@@ -30,6 +28,21 @@ const contactsSlice = createSlice({
         items: state.items.filter((item) => item.id !== action.payload),
       };
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
